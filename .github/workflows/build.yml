@@ -36,6 +36,7 @@ jobs:
         run: |
           curl -L "$SMPACKAGE_URL_PREFIX${SMVERSION}" --output sourcemod.tar.gz
           tar xfz sourcemod.tar.gz
+          mkdir -p addons/sourcemod/scripting/include
           cd addons/sourcemod/scripting
           chmod +x spcomp
           chmod +x spcomp64
@@ -60,10 +61,6 @@ jobs:
       - name: Copy sourcemod-plugins includes
         run: |
           cp sm_plugins/scripting/include/* addons/sourcemod/scripting/include/ -r
-      
-      - name: Copy steamworks includes
-        run: |
-          cp steamworks/
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script

@@ -42,7 +42,7 @@ public void OnClientPostAdminCheck(int client)
         return;
     }
     
-    if (k_EUserHasLicenseResultDoesNotHaveLicense == SteamWorks_HasLicenseForApp(client, 624820))
+    if (SteamWorks_HasLicenseForApp(client, 624820) != k_EUserHasLicenseResultHasLicense)
     {
         KickClient(client, "%t", "KickReason");
     }

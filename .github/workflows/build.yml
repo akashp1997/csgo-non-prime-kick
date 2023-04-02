@@ -5,6 +5,7 @@ name: Build plugin
 env:
   SMVERSION: 1.11
   SMPACKAGE_URL_PREFIX: "http://sourcemod.net/latest.php?os=linux&version="
+  STEAMWORKS_URL: "https://github.com/KyleSanderson/SteamWorks/releases/download/1.2.3c/package-lin.tgz"
 
 # Controls when the workflow will run
 on:
@@ -31,8 +32,26 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Get latest sourcemod
+        run: |
+          curl -L "$SMPACKAGE_URL_PREFIX${SMVERSION}" --output sourcemod.tar.gz
+          tar xfz sourcemod.tar.gz
+          mkdir -p addons/sourcemod/scripting/include
+          cd addons/sourcemod/scripting
+          chmod +x spcomp
+          chmod +x spcomp64
+          chmod +x compile.sh
+
+      - name: Checkout SteamWorks
+        run: |
+          curl -L "$STEAMWORKS_URL" --output steamworks.tar.gz
+          tar xfz steamworks.tar.gz
+          cp package/addons/sourcemod/* addons/sourcemod/ -r
+
       - name: Plugin Checkout
         uses: actions/checkout@v3
+        with:
+          path: plugin
       
       - name: Checkout sourcemod-plugins
         uses: actions/checkout@v3
@@ -41,24 +60,17 @@ jobs:
           fetch-depth: 1
           path: sm_plugins
 
-      - name: Get latest sourcemod
-        run: |
-          curl -L "$SMPACKAGE_URL_PREFIX${SMVERSION}" --output sourcemod.tar.gz
-          tar xfz sourcemod.tar.gz
-          cd addons/sourcemod/scripting
-          chmod +x spcomp
-          chmod +x spcomp64
-          chmod +x compile.sh
-
       - name: Copy sourcemod-plugins includes
         run: |
+          echo $(pwd)
+          ls -la
           cp sm_plugins/scripting/include/* addons/sourcemod/scripting/include/ -r
 
       # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Compile plugin
         run: |
-          echo "PLUGINS_LIST=$(ls *.sp | tr '\n' ' ')" >> $GITHUB_ENV
-          cp *.sp addons/sourcemod/scripting/ -r
+          echo "PLUGINS_LIST=$(ls plugin/*.sp | tr '\n' ' ')" >> $GITHUB_ENV
+          cp plugin/*.sp addons/sourcemod/scripting/ -r
           cd addons/sourcemod/scripting
           ./compile.sh ${{ env.PLUGINS_LIST }}
       

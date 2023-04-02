@@ -14,24 +14,24 @@ public int isPluginEnabled = 1;
 
 public OnPluginStart()
 {
-    public ConVar PluginEnabled = CreateConVar("sm_non_prime_kick_enabled", "1", "Whether the non-prime kick player plugin is enabled", FCVAR_PROTECTED, true, 0.0, true, 1.0);
+    ConVar PluginEnabled = CreateConVar("sm_non_prime_kick_enabled", "1", "Whether the non-prime kick player plugin is enabled", FCVAR_PROTECTED, true, 0.0, true, 1.0);
 
-    LoadTranslations("reset-score.phrases");
+    LoadTranslations("non-prime-kick.phrases");
     HookConVarChange(PluginEnabled, PluginStatusChanged);
 }
 
 public void PluginStatusChanged(ConVar PluginEnabled, char[] oldValue, char[] newValue)
 {
-	int newVal = StringToInt(newValue);
+    int newVal = StringToInt(newValue);
 
     isPluginEnabled = newVal;
-	if (newVal == 1) {
-		LogMessage("%t", "PluginEnabledLog");
-	}
-	else
-	{
-		LogMessage("%t", "PluginDisabledLog");
-	}
+    if (newVal == 1) {
+        LogMessage("%t", "PluginEnabledLog");
+    }
+    else
+    {
+        LogMessage("%t", "PluginDisabledLog");
+    }
 }
 
 public void OnClientPostAdminCheck(int client)

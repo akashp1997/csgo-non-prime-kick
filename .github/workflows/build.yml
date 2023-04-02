@@ -60,7 +60,8 @@ jobs:
 
       - name: Copy sourcemod-plugins includes
         run: |
-          ls -la addons/sourcemod
+          echo $(pwd)
+          ls -la
           cp sm_plugins/scripting/include/* addons/sourcemod/scripting/include/ -r
 
       # Runs a set of commands using the runners shell

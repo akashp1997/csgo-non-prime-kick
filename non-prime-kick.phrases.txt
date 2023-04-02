@@ -1,0 +1,15 @@
+﻿"Phrases"
+{
+	"PluginDisabledLog"
+	{
+		"en"			"Plugin is disabled"
+	}
+	"PluginEnabledLog"
+	{
+		"en"			"Plugin is enabled"
+	}
+	"KickReason"
+	{
+		"en"			"Sorry! We can't let you in without CS:GO prime or VIP status"
+	}
+}
